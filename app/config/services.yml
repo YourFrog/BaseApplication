@@ -1,0 +1,25 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+parameters:
+#    parameter_name: value
+
+services:
+    app.form.registration:
+        class: AppBundle\Form\RegistrationFormType
+        arguments:
+            - %fos_user.model.user.class%
+        tags:
+            - { name: form.type }
+
+    AppBundle\DataFixtures\:
+        resource: '../../src/AppBundle/DataFixtures'
+        tags: ['doctrine.fixture.orm']
+
+    PanelBundle\Controller\ResettingController:
+        arguments:
+            - "@event_dispatcher"
+            - "@fos_user.resetting.form.factory"
+            - "@fos_user.user_manager"
+            - "@fos_user.util.token_generator"
+            - "@fos_user.mailer"
+            - %fos_user.resetting.retry_ttl%

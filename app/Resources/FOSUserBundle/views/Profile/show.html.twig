@@ -1,0 +1,14 @@
+{% extends "app/layout.html.twig" %}
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block page_title %}
+    Profile
+{% endblock %}
+
+{% block content %}
+    ss
+<div class="fos_user_user_show">
+    <p>{{ 'profile.show.username'|trans }}: {{ user.username }}</p>
+    <p>{{ 'profile.show.email'|trans }}: {{ user.email }}</p>
+</div>
+{% endblock %}

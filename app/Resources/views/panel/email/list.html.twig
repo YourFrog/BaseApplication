@@ -1,0 +1,58 @@
+{% extends 'panel/layout.html.twig' %}
+
+{% block page_title %}
+    Kolejka wiadomości e-mail
+{% endblock %}
+
+{% block content %}
+    {% if emails %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data utworzenia</th>
+                    <th>Status</th>
+                    <th>Title</th>
+                    <th>Recipient</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for email in emails %}
+                    <tr>
+                        <td>{{ email.id }}</td>
+                        <td>{{ email.createAt.format('Y-m-d H:i:s') }}</td>
+                        <td>
+                            {% if email.status == 1 %}
+                                Oczekuje
+                            {% endif %}
+
+                            {% if email.status == 2 %}
+                                Aktualnie przetwarzany
+                            {% endif %}
+
+                            {% if email.status == 3 %}
+                                Wysłany
+                            {% endif %}
+
+                            {% if email.status == 4 %}
+                                Wstrzymany
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ email.messageObject.subject }}
+                        </td>
+                        <td>{{ email.messageObject.to|keys|join(', ') }}</td>
+                        <td>
+                            {% if email.status == 1 %}
+                                <a href="{{ path('panel_email_suspend', {'id': email.id}) }}">Wstrzymaj</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Brak wiadomości</p>
+    {% endif %}
+{% endblock %}

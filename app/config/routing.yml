@@ -1,0 +1,21 @@
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+
+panel:
+    resource: "@PanelBundle/Controller/"
+    type:     annotation
+    prefix: /panel
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+fos_message:
+    resource: "@FOSMessageBundle/Resources/config/routing.xml"
+    prefix: /message
+
+fos_comment_api:
+    type: rest
+    resource: "@FOSCommentBundle/Resources/config/routing.yml"
+    prefix: /comment
+    defaults: { _format: html }

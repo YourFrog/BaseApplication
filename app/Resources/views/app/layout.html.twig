@@ -1,0 +1,113 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/website/bootstrap/css/bootstrap.min.css') }}">
+
+    <title>{% block title %}Homepage{% endblock %}</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <a href="{{ path('homepage') }}">Stronga główna</a>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-2">
+                {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    <form action="{{ path("fos_user_security_check") }}" method="POST">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+
+                        <div class="row">
+                            Login
+                        </div>
+                        <div class="row mt-2">
+                            <input type="text" class="form-control" placeholder="{{ 'security.login.username'|trans }}" id="username" name="_username" value="" required="required" />
+                        </div>
+
+                        <div class="row mt-3">
+                            Password
+                        </div>
+                        <div class="row mt-2">
+                            <input type="password" class="form-control" placeholder="{{ 'security.login.password'|trans }}" id="password" name="_password" required="required" />
+                        </div>
+
+                        <div class="row mt-2">
+                            <input class="btn btn-primary submit float-right ml-auto" type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
+                        </div>
+
+                        <div class="row">
+                            <a href="{{ path('fos_user_registration_register') }}">Create Account</a>
+                        </div>
+
+                        <div class="row">
+                            <a href="{{ path('fos_user_resetting_request') }}">Forgot Password</a>
+                        </div>
+                    </form>
+                {% endif %}
+
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                <div class="row">
+                    <div class="col-12 pl-0">
+                        <h3>Menu</h3>
+                    </div>
+
+                    <ul class="nav flex-column">
+                        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                            <li class="nav-item">
+                                <a href="{{ path('fos_message_inbox') }}">Message ({{ fos_message_nb_unread() }})</a>
+                            </li>
+                            <li>&nbsp;</li>
+                            <li class="nav-item">
+                                <a href="{{ path('fos_user_change_password') }}">Change Password</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ path('fos_user_security_logout') }}">Logout</a>
+                            </li>
+                            <li>&nbsp;</li>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li>&nbsp;</li>
+                            <li>
+                                <a href="{{ path('panel_dashboard') }}">Panel</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-10">
+                <nav class="navbar navbar-light bg-light">
+                    <a class="navbar-brand" href="#">
+                        <img src="https://getbootstrap.com/docs/4.3/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+                        {% block page_title %}{% endblock %}
+                    </a>
+                </nav>
+                {% if error is defined and error %}
+                    <div class="p-3 mb-2 bg-danger text-white">{{ error }}</div>
+                {% endif %}
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+
+
+        <div class="col-12 text-right">
+            <a href="{{ path('report_bug') }}">Bug Report</a> |
+            <a href="{{ path('app_changelog') }}">Changelog</a>
+        </div>
+    </div>
+
+    <script src="{{ asset('assets/website/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/website/js/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/website/bootstrap/js/bootstrap.min.js') }}"></script>
+</body>
+</html>

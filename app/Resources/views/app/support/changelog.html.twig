@@ -1,0 +1,20 @@
+{% extends 'app/layout.html.twig' %}
+
+{% block page_title %}
+    Changelog
+{% endblock %}
+
+{% block content %}
+    {% for post in posts %}
+        <div class="col-12">
+            <h3>{{ post.version }}</h3>
+            <small>Data dystrybucji: {{ post.date.format('Y-m-d') }}</small>
+
+            <ul class="mt-2">
+                {% for item in post.items %}
+                    <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endfor %}
+{% endblock %}

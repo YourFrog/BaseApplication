@@ -1,0 +1,56 @@
+{% extends 'panel/layout.html.twig' %}
+
+{% block page_title %}
+    Lista zgłoszonych błędów
+{% endblock %}
+
+{% block content %}
+    {% if bugs %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data utworzenia</th>
+                    <th>Status</th>
+                    <th>Type</th>
+                    <th>Sender</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bug in bugs %}
+                    <tr>
+                        <td>{{ bug.id }}</td>
+                        <td>{{ bug.createAt.format('Y-m-d H:i:s') }}</td>
+                        <td>
+                            {% if bug.status == 1 %}
+                                <span class="label label-warning">Oczekuje</span>
+                            {% endif %}
+
+                            {% if bug.status == 2 %}
+                                <span class="label label-primary">Potwierdzony</span>
+                            {% endif %}
+
+                            {% if bug.status == 3 %}
+                                <span class="label label-danger">Odrzucony</span>
+                            {% endif %}
+
+                            {% if bug.status == 4 %}
+                                <span class="label label-default">Zamknięty</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ bug.subject.name }}
+                        </td>
+                        <td>{{ bug.email }}</td>
+                        <td>
+                            <a href="{{ path('panel_bug_detail', {'id': bug.id}) }}">Podejrzyj</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Brak zgłoszeń</p>
+    {% endif %}
+{% endblock %}

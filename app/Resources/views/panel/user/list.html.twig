@@ -1,0 +1,64 @@
+{% extends 'panel/layout.html.twig' %}
+
+{% block page_title %}
+    Użytkownicy
+{% endblock %}
+
+{% block content %}
+    {% if users %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Data utworzenia</th>
+                    <th>Ostatnie logowanie</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            <ul>
+                                {% for role in user.roles %}
+                                    <li>{{ role }}</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>{% if user.isEnabled %}Aktywne konto{% else %}Nie aktywne{% endif %}</td>
+                        <td>{{ user.createAt.format('Y-m-d H:i:s') }}</td>
+                        <td>
+                            {% if user.lastLogin %}
+                                {{ user.lastLogin.format('Y-m-d H:i:s') }}
+                            {% else %}
+                                ---
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if app.user.id != user.id %}
+                                <ul>
+                                {% if user.isAccountNonLocked() %}
+                                    <li><a href="{{ path('panel_user_lock', {'id': user.id}) }}">Zablokuj</a></li>
+                                {% else %}
+                                    <li><a href="{{ path('panel_user_unlock', {'id': user.id}) }}">Odblokuj</a></li>
+                                {% endif %}
+
+                                    <li><a href="{{ path('panel_user_reset', {'id': user.id}) }}">Zresetuj hasło</a></li>
+                                </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Brak użtkowników</p>
+    {% endif %}
+{% endblock %}
