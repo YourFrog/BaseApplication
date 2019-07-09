@@ -36,6 +36,13 @@ trait Common
         return $this->createAt;
     }
 
+    /**
+     * @return DateTime|null
+     */
+    public function getUpdateAt()
+    {
+        return $this->updateAt;
+    }
 
     /**
      * @param LifecycleEventArgs $eventArgs

@@ -4,6 +4,7 @@ namespace AppBundle\DataFixtures\ORM;
 
 use Doctrine\Bundle\FixturesBundle\ORMFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -11,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  *  Załadowanie użytkowników
  */
-class User extends AbstractFixture implements ORMFixtureInterface, ContainerAwareInterface
+class User extends AbstractFixture implements ORMFixtureInterface, OrderedFixtureInterface, ContainerAwareInterface
 {
     /**
      * @var ContainerInterface
@@ -55,5 +56,10 @@ class User extends AbstractFixture implements ORMFixtureInterface, ContainerAwar
         $manager->persist($object);
 
         $manager->flush();
+    }
+
+    public function getOrder()
+    {
+        return 100;
     }
 }

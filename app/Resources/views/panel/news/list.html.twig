@@ -1,0 +1,48 @@
+{% extends 'panel/layout.html.twig' %}
+
+{% block page_title %}
+    News'y
+{% endblock %}
+
+{% block content %}
+    <p class="text-right"><a href="{{ path('panel_news_new', {'type': type}) }}">Utwórz artykuł</a></p>
+
+    {% if items %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data utworzenia</th>
+                    <th>Ostatnia modyfikacja</th>
+                    <th>Draft</th>
+                    <th>Tytuł</th>
+                    <th>Autor</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for news in items %}
+                    <tr>
+                        <td>{{ news.id }}</td>
+                        <td>{{ news.createAt.format('Y-m-d H:i:s') }}</td>
+                        <td>{% if news.updateAt %}{{ news.updateAt.format('Y-m-d H:i:s') }}{% endif %}</td>
+                        <td>
+                            {% if news.published  %}
+                                <span class="label label-primary">Opublikowany</span>
+                            {% else %}
+                                <span class="label label-default">Draft</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ news.title }}</td>
+                        <td>{{ news.author.username }}</td>
+                        <td>
+                            <a href="{{ path('panel_news_edit', {'id': news.id, 'type': type}) }}">Edytuj</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Brak wpisów</p>
+    {% endif %}
+{% endblock %}

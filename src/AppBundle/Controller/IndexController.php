@@ -35,8 +35,10 @@ class IndexController extends Controller
             $error = $error->getMessage();
         }
 
+        $articles = $this->getDoctrine()->getManager()->getRepository(\AppBundle\Entity\News\News::class)->findBy(['type' => 'normal', 'published' => true], ['updateAt' => 'DESC'], 5);
         return $this->render('app/index/index.html.twig', [
-            'error' => $error
+            'error' => $error,
+            'articles' => $articles
         ]);
     }
 }

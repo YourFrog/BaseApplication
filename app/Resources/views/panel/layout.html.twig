@@ -67,6 +67,12 @@
                                     <li><a href="index3.html">Dashboard3</a></li>
                                 </ul>
                             </li>
+                            <li><a><i class="fa fa-envelope"></i> News<span class="fa fa-chevron-down"></span></a>
+                                <ul class="nav child_menu">
+                                    <li><a href="{{ path('panel_news', {'type': 'short'}) }}">Short</a></li>
+                                    <li><a href="{{ path('panel_news', {'type': 'normal'}) }}">Normal</a></li>
+                                </ul>
+                            </li>
                             <li><a href="{{ path('panel_bug') }}"><i class="fa fa-user"></i> Bugs</a></li>
                             <li><a href="{{ path('panel_user') }}"><i class="fa fa-user"></i> Users</a></li>
                             <li><a href="{{ path('panel_email') }}"><i class="fa fa-envelope"></i> Emails</a></li>
