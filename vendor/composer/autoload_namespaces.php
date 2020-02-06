@@ -8,7 +8,6 @@ $baseDir = dirname($vendorDir);
 return array(
     'WhiteOctober\\SwiftMailerDBBundle' => array($vendorDir . '/whiteoctober/swiftmailerdbbundle'),
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
-    'PhpOption\\' => array($vendorDir . '/phpoption/phpoption/src'),
     'PhpCollection' => array($vendorDir . '/phpcollection/phpcollection/src'),
     'Metadata\\' => array($vendorDir . '/jms/metadata/src'),
     'JsonpCallbackValidator' => array($vendorDir . '/willdurand/jsonp-callback-validator/src'),

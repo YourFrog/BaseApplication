@@ -97,6 +97,7 @@ EOF;
     public function getProxyCode(Definition $definition)
     {
         $code = $this->classGenerator->generate($this->generateProxyClass($definition));
+        $code = preg_replace('/^(class [^ ]++ extends )([^\\\\])/', '$1\\\\$2', $code);
 
         $code = preg_replace(
             '/(\$this->initializer[0-9a-f]++) && \1->__invoke\(\$this->(valueHolder[0-9a-f]++), (.*?), \1\);/',
@@ -110,6 +111,10 @@ EOF;
                 '${1}'.$this->getIdentifierSuffix($definition),
                 $code
             );
+        }
+
+        if (version_compare(self::getProxyManagerVersion(), '2.5', '<')) {
+            $code = preg_replace('/ \\\\Closure::bind\(function ((?:& )?\(\$instance(?:, \$value)?\))/', ' \Closure::bind(static function \1', $code);
         }
 
         return $code;

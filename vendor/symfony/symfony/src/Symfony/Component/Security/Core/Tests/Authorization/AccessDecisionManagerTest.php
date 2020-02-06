@@ -20,11 +20,9 @@ use Symfony\Component\Security\Core\Tests\Authorization\Stub\VoterWithoutInterfa
 
 class AccessDecisionManagerTest extends TestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testSetUnsupportedStrategy()
     {
+        $this->expectException('InvalidArgumentException');
         new AccessDecisionManager([$this->getVoter(VoterInterface::ACCESS_GRANTED)], 'fooBar');
     }
 
@@ -147,12 +145,8 @@ class AccessDecisionManagerTest extends TestCase
         $exception = LogicException::class;
         $message = sprintf('stdClass should implement the %s interface when used as voter.', VoterInterface::class);
 
-        if (method_exists($this, 'expectException')) {
-            $this->expectException($exception);
-            $this->expectExceptionMessage($message);
-        } else {
-            $this->setExpectedException($exception, $message);
-        }
+        $this->expectException($exception);
+        $this->expectExceptionMessage($message);
 
         $adm = new AccessDecisionManager([new \stdClass()]);
         $token = $this->getMockBuilder(TokenInterface::class)->getMock();

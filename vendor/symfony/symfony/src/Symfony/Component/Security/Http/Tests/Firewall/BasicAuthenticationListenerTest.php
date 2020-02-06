@@ -74,8 +74,6 @@ class BasicAuthenticationListenerTest extends TestCase
             'PHP_AUTH_PW' => 'ThePassword',
         ]);
 
-        $token = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\TokenInterface')->getMock();
-
         $tokenStorage = $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')->getMock();
         $tokenStorage
             ->expects($this->any())
@@ -182,12 +180,10 @@ class BasicAuthenticationListenerTest extends TestCase
         $listener->handle($event);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $providerKey must not be empty
-     */
     public function testItRequiresProviderKey()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('$providerKey must not be empty');
         new BasicAuthenticationListener(
             $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')->getMock(),
             $this->getMockBuilder('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface')->getMock(),

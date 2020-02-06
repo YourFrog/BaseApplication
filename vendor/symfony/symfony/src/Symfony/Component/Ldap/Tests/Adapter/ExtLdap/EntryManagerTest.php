@@ -17,12 +17,10 @@ use Symfony\Component\Ldap\Entry;
 
 class EntryManagerTest extends TestCase
 {
-    /**
-     * @expectedException \Symfony\Component\Ldap\Exception\NotBoundException
-     * @expectedExceptionMessage Query execution is not possible without binding the connection first.
-     */
     public function testGetResources()
     {
+        $this->expectException('Symfony\Component\Ldap\Exception\NotBoundException');
+        $this->expectExceptionMessage('Query execution is not possible without binding the connection first.');
         $connection = $this->getMockBuilder(Connection::class)->getMock();
         $connection
             ->expects($this->once())

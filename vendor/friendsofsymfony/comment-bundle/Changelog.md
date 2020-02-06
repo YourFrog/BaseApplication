@@ -1,6 +1,19 @@
 Changelog
 =========
 
+### 2.4.0 (2020-01-08)
+
+* Deprecated the `CommentExtension::isCommentDeleted` method.
+
+### 2.3.3 (2019-11-06)
+
+* Fix: use `Symfony\Contracts\EventDispatcher\Event` if available.
+* Fix: use `LegacyEventDispatcherProxy` if available.
+
+### 2.3.2 (2019-08-22)
+
+* Fix: `AclCommentManager::saveComment` must have a return value.
+
 ### 2.3.1 (2019-07-05)
 
 * Auto-injection of the container is deprecated since Symfony 4.2.

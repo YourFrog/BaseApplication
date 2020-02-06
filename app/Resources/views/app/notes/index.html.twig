@@ -1,0 +1,33 @@
+{% extends 'app/layout.html.twig' %}
+
+{% block page_title %}
+    Notatki
+{% endblock %}
+
+{% block content %}
+    {% if notes|length > 0 %}
+        {{ form_start(form) }}
+        {{ form_end(form) }}
+
+        <table class="table">
+            <thead>
+                <tr>Lp.</tr>
+                <tr>Nazwa</tr>
+            </thead>
+            <tbody>
+                {% for note in notes %}
+                    <tr>
+                        <td>{{ note.id }}</td>
+                        <td>{{ note.name }}</td>
+                        <td><a href="{{ path('notes_remove', {id: note.id}) }}">Usuń</a>, <a href="{{ path('notes_detail', {id: note.id}) }}">Szczegóły</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        Brak notatek.
+
+        {{ form_start(form) }}
+        {{ form_end(form) }}
+    {% endif %}
+{% endblock %}

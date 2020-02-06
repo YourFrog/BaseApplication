@@ -1,0 +1,57 @@
+{% extends 'app/layout.html.twig' %}
+
+{% block page_title %}
+    Notatka - {{ note.name }}
+{% endblock %}
+
+{% block content %}
+    {% if note.items|length > 0 %}
+        {{ form_start(form) }}
+        {{ form_end(form) }}
+
+        <table class="table">
+            <thead>
+                <tr></tr>
+                <tr>Lp.</tr>
+                <tr>Nazwa</tr>
+            </thead>
+            <tbody>
+                {% for noteItem in note.items %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="note-item-checkbox" value="{{ noteItem.id }}" {% if noteItem.isChecked %}checked="checked"{% endif %}>
+                        </td>
+                        <td>{{ noteItem.id }}</td>
+                        <td>{{ noteItem.name }}</td>
+                        <td><a href="{{ path('notes_item_remove', {id: noteItem.id}) }}">Usuń</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        Brak wpisów.
+
+        {{ form_start(form) }}
+        {{ form_end(form) }}
+    {% endif %}
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $(document).ready(function() {
+
+        $('input.note-item-checkbox').click(function() {
+            var value = $(this).attr("value");
+
+            var params = {}
+            params.noteItem = value;
+
+            $.post('{{ path('note_item_checked', {'note': note.id}) }}', params, function(result) {
+                if( result.status === "error" ) {
+                    alert(result.message);
+                }
+            }, "JSON");
+        });
+    });
+</script>
+{% endblock %}

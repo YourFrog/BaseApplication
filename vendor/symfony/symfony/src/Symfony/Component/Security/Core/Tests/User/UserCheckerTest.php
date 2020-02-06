@@ -33,11 +33,9 @@ class UserCheckerTest extends TestCase
         $this->assertNull($checker->checkPostAuth($account));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\CredentialsExpiredException
-     */
     public function testCheckPostAuthCredentialsExpired()
     {
+        $this->expectException('Symfony\Component\Security\Core\Exception\CredentialsExpiredException');
         $checker = new UserChecker();
 
         $account = $this->getMockBuilder('Symfony\Component\Security\Core\User\AdvancedUserInterface')->getMock();
@@ -65,11 +63,9 @@ class UserCheckerTest extends TestCase
         $this->assertNull($checker->checkPreAuth($account));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\LockedException
-     */
     public function testCheckPreAuthAccountLocked()
     {
+        $this->expectException('Symfony\Component\Security\Core\Exception\LockedException');
         $checker = new UserChecker();
 
         $account = $this->getMockBuilder('Symfony\Component\Security\Core\User\AdvancedUserInterface')->getMock();
@@ -78,11 +74,9 @@ class UserCheckerTest extends TestCase
         $checker->checkPreAuth($account);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\DisabledException
-     */
     public function testCheckPreAuthDisabled()
     {
+        $this->expectException('Symfony\Component\Security\Core\Exception\DisabledException');
         $checker = new UserChecker();
 
         $account = $this->getMockBuilder('Symfony\Component\Security\Core\User\AdvancedUserInterface')->getMock();
@@ -92,11 +86,9 @@ class UserCheckerTest extends TestCase
         $checker->checkPreAuth($account);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccountExpiredException
-     */
     public function testCheckPreAuthAccountExpired()
     {
+        $this->expectException('Symfony\Component\Security\Core\Exception\AccountExpiredException');
         $checker = new UserChecker();
 
         $account = $this->getMockBuilder('Symfony\Component\Security\Core\User\AdvancedUserInterface')->getMock();

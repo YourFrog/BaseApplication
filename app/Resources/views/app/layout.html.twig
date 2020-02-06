@@ -64,6 +64,9 @@
                             <li class="nav-item">
                                 <a href="{{ path('fos_message_inbox') }}">Message ({{ fos_message_nb_unread() }})</a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ path('notes_list') }}">Notatki</a>
+                            </li>
                             <li>&nbsp;</li>
                             <li class="nav-item">
                                 <a href="{{ path('fos_user_change_password') }}">Change Password</a>
@@ -109,5 +112,7 @@
     <script src="{{ asset('assets/website/js/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/website/js/popper.min.js') }}"></script>
     <script src="{{ asset('assets/website/bootstrap/js/bootstrap.min.js') }}"></script>
+
+    {% block javascript %}{% endblock %}
 </body>
 </html>

@@ -140,9 +140,9 @@ class Form implements \IteratorAggregate, FormInterface
     private $lockSetData = false;
 
     /**
-     * @var string|int|null
+     * @var string
      */
-    private $name;
+    private $name = '';
 
     /**
      * @var bool Whether the form inherits its underlying data from its parent
@@ -211,7 +211,7 @@ class Form implements \IteratorAggregate, FormInterface
             return $this->propertyPath;
         }
 
-        if (null === $this->name || '' === $this->name) {
+        if ('' === $this->name) {
             return null;
         }
 
@@ -757,9 +757,7 @@ class Form implements \IteratorAggregate, FormInterface
             return $this->clickedButton;
         }
 
-        if ($this->parent && method_exists($this->parent, 'getClickedButton')) {
-            return $this->parent->getClickedButton();
-        }
+        return $this->parent && method_exists($this->parent, 'getClickedButton') ? $this->parent->getClickedButton() : null;
     }
 
     /**
@@ -819,7 +817,7 @@ class Form implements \IteratorAggregate, FormInterface
 
         if (!$child instanceof FormInterface) {
             if (!\is_string($child) && !\is_int($child)) {
-                throw new UnexpectedTypeException($child, 'string, integer or Symfony\Component\Form\FormInterface');
+                throw new UnexpectedTypeException($child, 'string or Symfony\Component\Form\FormInterface');
             }
 
             if (null !== $type && !\is_string($type) && !$type instanceof FormTypeInterface) {
