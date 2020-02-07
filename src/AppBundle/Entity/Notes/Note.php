@@ -38,11 +38,11 @@ class Note
     protected $name;
 
     /**
-     * @var User
+     * @var NoteRelationship[]
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Notes\NoteRelationship", mappedBy="note")
      */
-    private $owner;
+    private $relations;
 
     /**
      * @var NoteItem[]
@@ -57,6 +57,7 @@ class Note
     public function __construct()
     {
         $this->items = new ArrayCollection();
+        $this->relations = new ArrayCollection();
     }
 
     /**
@@ -65,14 +66,6 @@ class Note
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * @return User
-     */
-    public function getOwner(): User
-    {
-        return $this->owner;
     }
 
     /**
@@ -92,21 +85,24 @@ class Note
     }
 
     /**
-     * @return NoteItem[]
+     * @return NoteRelationship[]
      */
-    public function getItems(): array
+    public function getRelations(): array
     {
-        return $this->items->filter(function(NoteItem $item) {
-            return !$item->isGhost();
-        })->toArray();
+        return $this->relations->toArray();
     }
 
     /**
-     * @param User $owner
+     * @param NoteRelationship $relation
      */
-    public function setOwner(User $owner)
+    public function addRelationship(NoteRelationship $relation)
     {
-        $this->owner = $owner;
+        if( $this->relations->contains($relation) ) {
+            return;
+        }
+
+        $this->relations->add($relation);
+        $relation->setNote($this);
     }
 
     /**
@@ -119,4 +115,19 @@ class Note
         $this->name = $name;
     }
 
+    /**
+     * @return NoteItem[]
+     */
+    public function getItems(): array
+    {
+        return $this->items->toArray();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGhost(): bool
+    {
+        return $this->ghost;
+    }
 }

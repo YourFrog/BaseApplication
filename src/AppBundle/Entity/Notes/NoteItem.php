@@ -92,22 +92,6 @@ class NoteItem
     }
 
     /**
-     * @return bool
-     */
-    public function isChecked(): bool
-    {
-        return $this->checked;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isGhost(): bool
-    {
-        return $this->ghost;
-    }
-
-    /**
      * @return string
      */
     public function getName(): string
@@ -116,10 +100,26 @@ class NoteItem
     }
 
     /**
+     * @return bool
+     */
+    public function isChecked(): bool
+    {
+        return $this->checked;
+    }
+
+    /**
      * @return Note
      */
     public function getNote(): Note
     {
         return $this->note;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGhost(): bool
+    {
+        return $this->ghost;
     }
 }

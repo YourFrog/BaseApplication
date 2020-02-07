@@ -55,5 +55,6 @@ security:
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/panel, role: ROLE_ADMIN }
         - { path: ^/message, role: ROLE_USER }
+        - { path: ^/notes, role: ROLE_USER }
         - { path: ^/, role: IS_AUTHENTICATED_ANONYMOUSLY }
         

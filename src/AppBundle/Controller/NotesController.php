@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Form;
 use AppBundle\Entity;
+use AppBundle\Service;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -29,20 +30,29 @@ class NotesController extends Controller
 
         return $this->redirectToRoute('notes_list');
     }
+
     /**
      * @Route("/notes/item/remove/{id}", name="notes_item_remove")
      */
     public function deleteItemAction(Entity\Notes\NoteItem $nodeItem)
     {
-        $nodeItem->setGhost(true);
+        /** @var Entity\User $user */
+        $user = $this->getUser();
 
-        if( $nodeItem->getNote()->getOwner()->getId() === $this->getUser()->getId() ) {
+        $note = $nodeItem->getNote();
+
+        /** @var Service\Notes\UserIsOwner $service */
+        $userIsOwner = $this->get('service.notes.UserIsOwner');
+
+        if( $userIsOwner->execute($note, $user) ) {
+            $nodeItem->setGhost(true);
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($nodeItem);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('notes_detail', ['id' => $nodeItem->getNote()->getId()]);
+        return $this->redirectToRoute('notes_detail', ['id' => $note->getId()]);
     }
 
     /**
@@ -52,6 +62,9 @@ class NotesController extends Controller
      */
     public function checkedAction(Request $request, Entity\Notes\Note $note)
     {
+        /** @var Entity\User $user */
+        $user = $this->getUser();
+
         $nodeItemID =  $request->request->get('noteItem');
 
         $repository = $this->getDoctrine()->getRepository(Entity\Notes\NoteItem::class);
@@ -72,7 +85,10 @@ class NotesController extends Controller
             ]);
         }
 
-        if( $note->getOwner()->getId() !== $this->getUser()->getId() ) {
+        /** @var Service\Notes\UserIsOwner $userIsOwner */
+        $userIsOwner = $this->get('service.notes.UserIsOwner');
+
+        if( !$userIsOwner->execute($note, $user) ) {
             return new JsonResponse([
                 'status' => 'error',
                 'message' => 'You are not owner'
@@ -117,8 +133,12 @@ class NotesController extends Controller
             $entityManager->flush();
         }
 
+        /** @var Service\Notes\ListOfActiveNoteItems $service */
+        $service = $this->get('service.notes.ListOfActiveNoteItems');
+
         $params = [];
         $params['note'] = $note;
+        $params['items'] = $service->execute($note);
         $params['form'] = $form->createView();
 
         return $this->render('app/notes/details.html.twig', $params);
@@ -129,26 +149,35 @@ class NotesController extends Controller
      */
     public function listAction(Request $request)
     {
+        /** @var Entity\User $user */
+        $user = $this->getUser();
+
         $form = $this->createForm(Form\NewNotesType::class);
         $form->handleRequest($request);
 
         if( $form->isSubmitted() && $form->isValid() ) {
             $data = $form->getData();
 
-            $entity = new Entity\Notes\Note();
-            $entity->setOwner($this->getUser());
-            $entity->setName($data['name']);
+            $note = new Entity\Notes\Note();
+            $note->setName($data['name']);
+
+            $noteRelationship = new Entity\Notes\NoteRelationship();
+            $noteRelationship->setUser($user);
+            $noteRelationship->setNote($note);
+            $noteRelationship->setType(Entity\Notes\NoteRelationship::OWNER);
 
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($entity);
+            $entityManager->persist($note);
+            $entityManager->persist($noteRelationship);
             $entityManager->flush();
         }
 
-        $repository = $this->getDoctrine()->getRepository(Entity\Notes\Note::class);
+        /** @var Service\Notes\ListOfActiveNote $listOfActiveNote */
+        $listOfActiveNote = $this->get('service.notes.ListOfActiveNote');
 
         $params = [];
         $params['form'] = $form->createView();
-        $params['notes'] = $repository->findBy(['owner' => $this->getUser(), 'ghost' => false]);
+        $params['notes'] = $listOfActiveNote->execute($user);
 
         return $this->render('app/notes/index.html.twig', $params);
     }

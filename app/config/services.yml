@@ -4,6 +4,9 @@ parameters:
 #    parameter_name: value
 
 services:
+    _defaults:
+        autowire: true
+
     app.form.registration:
         class: AppBundle\Form\RegistrationFormType
         arguments:
@@ -23,3 +26,15 @@ services:
             - "@fos_user.util.token_generator"
             - "@fos_user.mailer"
             - %fos_user.resetting.retry_ttl%
+
+    service.notes.ListOfActiveNote:
+        public: true
+        class: AppBundle\Service\Notes\ListOfActiveNote
+
+    service.notes.ListOfActiveNoteItems:
+        public: true
+        class: AppBundle\Service\Notes\ListOfActiveNoteItems
+
+    service.notes.UserIsOwner:
+        public: true
+        class: AppBundle\Service\Notes\UserIsOwner

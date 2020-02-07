@@ -16,13 +16,13 @@
                 <tr>Nazwa</tr>
             </thead>
             <tbody>
-                {% for noteItem in note.items %}
-                    <tr>
-                        <td>
-                            <input type="checkbox" class="note-item-checkbox" value="{{ noteItem.id }}" {% if noteItem.isChecked %}checked="checked"{% endif %}>
+                {% for noteItem in items %}
+                    <tr data-note-item-id="{{ noteItem.id }}">
+                        <td class="note-item-checked">
+                            <input type="checkbox" value="{{ noteItem.id }}" {% if noteItem.isChecked %}checked="checked"{% endif %}>
                         </td>
-                        <td>{{ noteItem.id }}</td>
-                        <td>{{ noteItem.name }}</td>
+                        <td class="note-item-checked">{{ loop.index }}</td>
+                        <td class="note-item-checked">{{ noteItem.name }}</td>
                         <td><a href="{{ path('notes_item_remove', {id: noteItem.id}) }}">Usuń</a></td>
                     </tr>
                 {% endfor %}
@@ -40,15 +40,17 @@
 <script>
     $(document).ready(function() {
 
-        $('input.note-item-checkbox').click(function() {
-            var value = $(this).attr("value");
+        $('.note-item-checked').click(function() {
+            var value = $(this).parent().attr("data-note-item-id");
 
-            var params = {}
+            var params = {};
             params.noteItem = value;
 
             $.post('{{ path('note_item_checked', {'note': note.id}) }}', params, function(result) {
                 if( result.status === "error" ) {
                     alert(result.message);
+                } else {
+                    $('input[value="' + value + '"]').prop('checked', result.data.checked);
                 }
             }, "JSON");
         });
