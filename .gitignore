@@ -13,3 +13,4 @@ build.xml
 !var/sessions/.gitkeep
 !var/SymfonyRequirements.php
 !composer.lock
+/vendor
