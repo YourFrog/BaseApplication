@@ -47,7 +47,8 @@
         "whiteoctober/swiftmailerdbbundle": "^1.0",
         "friendsofsymfony/message-bundle": "^2.0",
         "friendsofsymfony/comment-bundle": "^2.3",
-        "symfony/assetic-bundle": "dev-master"
+        "symfony/assetic-bundle": "dev-master",
+        "yourfrog/symfony-bundle_history-table": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
@@ -56,11 +57,6 @@
         "phpunit/phpunit": "^6.5.0",
         "symfony/web-server-bundle": "^3.4.2",
         "doctrine/doctrine-fixtures-bundle": "^3.0"
-    },
-    "config": {
-        "platform": {
-            "php": "7.0.8"
-        }
     },
     "scripts": {
         "test": [
@@ -72,6 +68,7 @@
         "rebuild": [
             "php bin/console doctrine:schema:drop --force --full-database",
             "php bin/console doctrine:schema:update --force",
+            "php bin/console app:triggers enable-insert=1",
             "php bin/console doctrine:fixtures:load --purge-with-truncate --no-interaction"
         ],
         "post-install-cmd": [

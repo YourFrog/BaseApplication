@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use HistoryTableBundle\Annotation\DisableHistoryTable;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(schema="public", name="changelog")
  * @ORM\HasLifecycleCallbacks()
+ * @DisableHistoryTable
  */
 class Changelog
 {

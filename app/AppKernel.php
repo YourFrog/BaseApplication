@@ -23,7 +23,8 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new FOS\RestBundle\FOSRestBundle(),
             new FOS\CommentBundle\FOSCommentBundle(),
-            new JMS\SerializerBundle\JMSSerializerBundle($this),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
+            new HistoryTableBundle\HistoryTableBundle()
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
